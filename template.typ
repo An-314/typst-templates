@@ -60,15 +60,16 @@
   // 调整标题
   show heading: it => box(width: 100%)[
     #set text(font: heading-font)
+    #v(-0.8em)
     #if it.numbering != none { counter(heading).display() }
     #h(0.2em)
     #it.body
+    #v(0.5em)
   ]
   show heading.where(level: 1): it => box(width: 100%)[
     #v(0.3em)
     #set heading(numbering: "一")
     #it
-    #v(0.2em)
   ]
 
   /** 把每一板块封装成函数 */
