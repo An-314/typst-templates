@@ -103,7 +103,7 @@
     }
   }
   let mkauthor(author) = {
-    let author-size = if(template == "report"){ 1.3em }else{ 1.0em }
+    let author-size = if(template == "report"){ 1.3em }else{ 1.1em }
     pad(
       top: 0.5em,
       bottom: 0.5em,
@@ -122,6 +122,7 @@
       set text(1.3em)
       time
     } else{
+      v(-0.3em)
       set text(1em)
       time
   }]}}
