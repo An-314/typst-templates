@@ -12,8 +12,7 @@
 
 ## 放置本地的Local packages中
 
-也可以将改文件配置到本地的packages仓库中，参考[官方文档]
-(https://github.com/typst/packages?tab=readme-ov-file#local-packages)。放置在`%APPDATA%\typst\packages\local\mytemplate\1.0.0`文件夹下，然后在文件夹中加入`typst.toml`文件，内容如下：
+也可以将改文件配置到本地的packages仓库中，参考[官方文档](https://github.com/typst/packages?tab=readme-ov-file#local-packages)。放置在`%APPDATA%\typst\packages\local\mytemplate\1.0.0`文件夹下，然后在文件夹中加入`typst.toml`文件，内容如下：
 ```toml
 [package]
 name = "mytemplate"
