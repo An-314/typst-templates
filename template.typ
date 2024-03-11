@@ -199,7 +199,11 @@
   // 调整页眉页脚
   let pageheading = [
     #set text(font: header-font)
-    #let header = [#locate(loc => [#counter(heading.where(level:1)).display() #query(selector(heading.where(level:1)).before(loc), loc).last().body.text])]
+    #let header = if(template in ("article")) {
+      locate(loc => [#locate(loc => [#counter(heading.where(level:1)).display() #query(selector(heading.where(level:1)).before(loc), loc).last().body.text])])
+    }else{
+      ""
+    }
     #if(header != "" and header != none) {
       locate(loc => if(loc.page() != 1) [#title #h(1fr) #info #h(1fr) #header])}else{
       locate(loc => if(loc.page() != 1) [#title #h(1fr) #info])

@@ -2,11 +2,31 @@
 
 # 使用方法
 
+## 放在同一文件夹下
+
 将`template.typ`放入同文件夹，并且在撰写的文档中使用
 ```typst
 #import "template.typ": *
 ```
 即可使用模板。
+
+## 放置本地的Local packages中
+
+也可以将改文件配置到本地的packages仓库中，参考[官方文档]
+(https://github.com/typst/packages?tab=readme-ov-file#local-packages)。放置在`%APPDATA%\typst\packages\local\mytemplate\1.0.0`文件夹下，然后在文件夹中加入`typst.toml`文件，内容如下：
+```toml
+[package]
+name = "mytemplate"
+version = "1.0.0"
+entrypoint = "template.typ"
+authors = ["AnZreww"]
+description = "AnZrew's typst template"
+```
+以使得编译器能够识别该模板。然后在文档中使用
+```typst
+#import "@local/mytemplate:1.0.0": *
+```
+来使用该模板。
 
 # 模板
 
