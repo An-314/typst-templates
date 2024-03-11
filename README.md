@@ -28,6 +28,10 @@
 ```
 这是函数的参数和默认值。`template`是模板的名称，`title`是标题，`info`是副标题，`authors`是作者，`time`是时间，`abstract`是摘要，`keywords`是关键词，`contents`是是否生成目录，`content_depth`是目录的深度，`font_size`是正文字体大小。
 
+目前支持：
+- article：一般文档
+- report：实验报告
+
 # 其他模块
 
 针对于其他问题，`template.typ`中还包含了一些其他的模块。
@@ -38,7 +42,8 @@
 
 # TODO
 
+- [x] 解决公式编号问题：默认有编号，可以通过`#set math.equation(numbering: none)`来取消公式的编号
+- [x] 添加模板：Report
 - [ ] 添加模板：Notes
-- [ ] 添加模板：Report
 - [ ] 添加更多的模块，例如：定理证明等等
-- [ ] 解决公式编号问题
+- [ ] report的页眉无法正常显示章节名（暂时没有找到解决方案）

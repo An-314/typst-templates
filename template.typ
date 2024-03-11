@@ -1,5 +1,10 @@
 /* This is a template for writing articles in Chinese. */
 
+#let newpara() = {
+  par()[#text(size: 0.0em)[#h(0.0em)]]
+  v(-12pt)
+}
+
 #let project(
   template: "article",
   title: "",
@@ -52,53 +57,7 @@
   show link: underline
   show link: set text(blue)
 
-  // 页码标记：首页
-  set page(numbering: "1", number-align: center, header: align(left)[
-    #set text(font: header-font)
-    #locate(loc => if(loc.page() != 1) [#title])
-  ])
-
-  // 设置标题
-  if(template == "article") {
-    // 标题
-    align(center)[
-      #block(text(font: title-font, weight: 700, 2.3em, title))
-    ]
-    // 信息
-    if(info != ""){
-    align(center)[
-      #v(0.5em)
-      #block(text(font: author-font, 1.5em, info))
-    ]}
-    // 作者信息
-    pad(
-      top: 0.5em,
-      bottom: 0.5em,
-      x: 2em,
-      grid(
-        columns: (1fr,) * calc.min(3, authors.len()),
-        gutter: 1em,
-        ..authors.map(author => align(center, text(font: author-font, author))),
-      ),
-    )
-    // 时间
-    if (time != "") {align(center)[
-      #set text(1em)
-      #time
-    ]}
-    // 摘要
-    if abstract != none [
-      #v(2pt)
-      *摘要：*#abstract
-      #v(1pt)
-      #if keywords!= () [
-        *关键字：* 
-        #text(font: kai, keywords.join("；"))
-      ]
-      #v(10pt)
-    ]
-  }
-  // 定义标题样式
+  // 调整标题
   show heading: it => box(width: 100%)[
     #set text(font: heading-font)
     #if it.numbering != none { counter(heading).display() }
@@ -111,25 +70,85 @@
     #it
     #v(0.2em)
   ]
-  // 显示目录
-  if(contents) {
-    let _TEMPLATE_LISTS_ = ("book", "report")
-    if(template in ("book", "report")) {
-      set page(
-        numbering: "I", number-align: center, header: align(left)[
-        #set text(font: header-font)
-        #title])
-      counter(page).update(1)
+
+  /** 把每一板块封装成函数 */
+  let mktitle(title) ={
+    align(center)[
+      #if(template == "report") {
+        v(10em)
+        block(text(font: title-font, weight: 700, 2.2em, title))
+        v(5em)
+      } else if(template == "book") {
+        v(5em)
+        block(text(font: title-font, weight: 700, 2.5em, title))
+        v(2em)
+      } else [
+        #block(text(font: title-font, weight: 700, 2.3em, title))
+      ]
+  ]}
+  let mkinfo(info) = {
+    if(info != ""){
+      align(center)[
+        #if (template == "report") {
+          align(center)[
+            #v(0em)
+            #block(text(font: title-font, weight: 700, 2.5em, info))
+            #v(15em)
+          ]}else{
+            v(0.5em)
+            block(text(font: author-font, 1.5em, info))
+        }
+      ]
     }
-    set par(first-line-indent: 2em,leading: 1em)
-    show outline.entry.where(level: 1): it => {
-        v(0.3em)
-        h(-2.0em)
-        set text(15pt)
-        strong(it)
+  }
+  let mkauthor(author) = {
+    let author-size = if(template == "report"){ 1.3em }else{ 1.0em }
+    pad(
+      top: 0.5em,
+      bottom: 0.5em,
+      x: 2em,
+      grid(
+        columns: (1fr,) * calc.min(3, authors.len()),
+        gutter: 1em,
+        ..authors.map(author => align(center, text(font: author-font,size: author-size, author))),
+      ),
+    )
+  }
+  let mktime(time) = {
+  if (time != "") {align(center)[
+    #if(template == "report") {
+      v(10em)
+      set text(1.3em)
+      time
+    } else{
+      set text(1em)
+      time
+  }]}}
+  let mkabstruct(abstract, keywords) = {
+    if (abstract != none) {
+      set par(first-line-indent: 0em,leading: 1.1em)
+      v(2pt)
+      [*摘要：*#abstract]
+      v(1pt)
+      if keywords!= () [
+        *关键字：* 
+        #text(font: kai, keywords.join("；"))
+      ]
+      v(10pt)
     }
-    outline(indent: auto, depth: content_depth, fill: repeat( "  ·"))
-    pagebreak()
+  }
+  let mkcontent(contents) = {
+    if(contents) {
+      set par(first-line-indent: 2em,leading: 1em)
+      show outline.entry.where(level: 1): it => {
+          v(0.3em)
+          h(-2.0em)
+          set text(15pt)
+          strong(it)
+      }
+      outline(indent: auto, depth: content_depth, fill: repeat( "  ·"))
+      v(20pt)
+    }
   }
   // 调整图片
   show figure: it => [
@@ -166,13 +185,52 @@
     #set text(font: quote-font)
     #align(center)[#it]
   ]
-  body
+  // 数学公式
+  show heading.where(level:1): it => {
+  counter(math.equation).update(0)
+  it
+  }
+  set math.equation(numbering: it => {
+    locate(loc => {
+      let count = counter(heading.where(level:1)).at(loc).last()
+      numbering("(1.1)", count, it)
+    })
+  })
+  // 调整页眉页脚
+  let pageheading = [
+    #set text(font: header-font)
+    #let header = [#locate(loc => [#counter(heading.where(level:1)).display() #query(selector(heading.where(level:1)).before(loc), loc).last().body.text])]
+    #if(header != "" and header != none) {
+      locate(loc => if(loc.page() != 1) [#title #h(1fr) #info #h(1fr) #header])}else{
+      locate(loc => if(loc.page() != 1) [#title #h(1fr) #info])
+    }
+  ]
+  // 正文
+  if(template in ("article")){
+    set page(numbering: "1", number-align: center, header: pageheading,)
+    mktitle(title)
+    mkinfo(info)
+    mkauthor(authors)
+    mktime(time)
+    mkabstruct(abstract, keywords)
+    mkcontent(contents)
+    body
+  }else if(template in ("book", "report")){
+    mktitle(title)
+    mkinfo(info)
+    mkauthor(authors)
+    mktime(time)
+    set page(numbering: "I", number-align: center,header: pageheading,)
+    counter(page).update(1)
+    mkabstruct(abstract, keywords)
+    mkcontent(contents)
+    set page(numbering: "1", number-align: center)
+    counter(page).update(1)
+    body
+  }
 }
 
-#let newpara() = {
-  par()[#text(size: 0.0em)[#h(0.0em)]]
-  v(-12pt)
-}
+
 
 #let problem-counter = counter("problem")
 #problem-counter.step()

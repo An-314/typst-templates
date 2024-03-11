@@ -1,15 +1,38 @@
 #import "template.typ": *
 
 #show: project.with(
-  title: [这是一个标题],
-  info: [这是一个副标题],
+  template: "report",
+  title: [模板的使用方法],
+  info: [这是实验报告的模板],
   authors: (
-    "第一作者",
-    "第二作者",
-    "第三作者",
-    "第四作者",
-    "第五作者",
-    "第六作者",
+    "AnZrew",
+    "AnZreww",
+    "AnZrewww",
+  ),
+  time: "这是一个时间",
+  abstract: [这里是摘要。也可以不要这个摘要，`abstract`的缺省值是`none`，不需要的时候可以不写在函数里。逻辑是要显示`keywords`一定要有`abstract`；没有`keywords`也可以显示`abstract`。],
+  keywords: (
+    "用",
+    `array`,
+    "来",
+    "输入",
+    "关键词",
+  ),
+  contents:true,
+)
+
+通过这样的方式创建一个`report`文件：
+```typst
+#import "template.typ": *
+
+#show: project.with(
+  template: "report",
+  title: [模板的使用方法],
+  info: [这是文章的模板],
+  authors: (
+    "AnZrew",
+    "AnZreww",
+    "AnZrewww",
   ),
   time: "这是一个时间",
   abstract: [#lorem(100)],
@@ -21,16 +44,16 @@
     "关键词5",
     "关键词6",
   ),
+  // 选择`contents: true`来显示目录。
   contents:true,
 )
+```
 
-
-#lorem(30)
-
-= #lorem(2)
+= #lorem(3)
 
 #lorem(30)
 
+// 可以用`#let`来定义一些变量，然后在文章中使用
 #let footnote1 = [
   《滕王阁序》，原题作《滕王阁诗序》，全名《秋日登洪府滕王阁饯别序》，初唐四杰之一王勃作品，作于唐高宗上元二年九月九日（675年10月3日），是古今传诵的骈文名篇。全篇773字，产生了40个成语，涉及37个典故。
 ]
@@ -94,15 +117,22 @@ $
 
 其中$a$、$b$为直角三角形的两条直角边，$c$为斜边。
 
-上面的是没有缩进的，也可以通过`#newpara()`来换行。
+上面的是没有缩进的，也可以通过`#newpara()`来换行。另外，可以在局部利用`#set math.equation(numbering: none)`来取消公式的编号。
 
+#pad[
+#set math.equation(numbering: none)
 $
 a^2+b^2=c^2
 $
+]
 
 #newpara()
 
 遥襟甫畅，逸兴遄飞。爽籁发而清风生，纤歌凝而白云遏。睢园绿竹，气凌彭泽之樽；邺水朱华，光照临川之笔。四美具，二难并。穷睇眄于中天，极娱游于暇日。天高地迥，觉宇宙之无穷；兴尽悲来，识盈虚之有数。望长安于日下，目吴会于云间。地势极而南溟深，天柱高而北辰远。关山难越，谁悲失路之人？萍水相逢，尽是他乡之客。怀帝阍而不见，奉宣室以何年？
+
+$
+a^2+b^2=c^2
+$
 
 ```cpp
 #include <stdio.h>
@@ -151,5 +181,3 @@ int main() {
 闲云潭影日悠悠，物换星移几度秋。\
 阁中帝子今何在？槛外长江空自流。
 ]
-
-
