@@ -49,17 +49,17 @@ description = "AnZrew's typst template"
 ```
 这是函数的参数和默认值。这些参数的含义：
 ```typst
-template: str      \\选择模板，目前支持article、report、book
-title: str         \\标题
-info: str          \\信息，例如副标题、课程名、教师名等（可选）
-authors: arr(str)  \\作者（）
-time: str          \\时间
-abstract: str      \\摘要（可选）
-keywords: arr(str) \\关键词（可选）
-preface: str       \\前言（可选）
-contents: bool     \\是否生成目录（缺省值，可以不写）
-content_depth: int \\目录深度（缺省值，可以不写）
-font_size: lengt   \\字体大小（缺省值，可以不写）
+template: str      //选择模板，目前支持article、report、book
+title: str         //标题
+info: str          //信息，例如副标题、课程名、教师名等（可选）
+authors: arr(str)  //作者（）
+time: str          //时间
+abstract: str      //摘要（可选）
+keywords: arr(str) //关键词（可选）
+preface: str       //前言（可选）
+contents: bool     //是否生成目录（缺省值，可以不写）
+content_depth: int //目录深度（缺省值，可以不写）
+font_size: lengt   //字体大小（缺省值，可以不写）
 ```
 
 目前支持：
