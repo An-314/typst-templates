@@ -13,11 +13,13 @@
   time: "",
   abstract: none,
   keywords: (),
+  preface: none,
   contents: false,
   content_depth: 2,
   font_size: 11pt,
   body
 ) = {
+  /****** 设置字体 ******/
   let song = ("Linux Libertine", "SimSun")
   let hei = ("Linux Libertine", "SIMHEI")
   let kai = ("Linux Libertine", "KaiTi",)
@@ -33,13 +35,12 @@
   let emph-font = kai
   let quote-font = kai
   let raw-font = code
-  
+  /************************* 初始化文档 *************************/
   set document(author: authors, title: title)
   set heading(numbering: "1.1")
   set text(font: body-font, lang: "zh", region: "cn")
   set bibliography(style: "gb-7714-2015-numeric")
-
-  // 设置字体字号
+  /************************* 设置样式字体 *************************/
   set par(first-line-indent: 2em,leading: 1.1em)
   set enum(indent: 2em)
   set figure(gap: 0.5cm)
@@ -56,8 +57,7 @@
   show raw: set text(font: (raw-font, "simsun"), size: 10pt)
   show link: underline
   show link: set text(blue)
-
-  // 调整标题
+  /************************* 调整样式 *************************/
   show heading: it => box(width: 100%)[
     #set text(font: heading-font)
     #v(-0.8em)
@@ -80,9 +80,9 @@
         block(text(font: title-font, weight: 700, 2.2em, title))
         v(5em)
       } else if(template == "book") {
+        v(20em)
+        block(text(font: title-font, weight: 700, 2.3em, title))
         v(5em)
-        block(text(font: title-font, weight: 700, 2.5em, title))
-        v(2em)
       } else [
         #block(text(font: title-font, weight: 700, 2.3em, title))
       ]
@@ -90,12 +90,15 @@
   let mkinfo(info) = {
     if(info != ""){
       align(center)[
-        #if (template == "report") {
+        #if (template in ("report")) {
           align(center)[
             #v(0em)
             #block(text(font: title-font, weight: 700, 2.5em, info))
             #v(15em)
-          ]}else{
+          ]}else if(template in ("book")) {
+            block(text(font: title-font, weight: 700, 1.5em, info))
+            v(10em)
+          }else{
             v(0.5em)
             block(text(font: author-font, 1.5em, info))
         }
@@ -117,7 +120,7 @@
   }
   let mktime(time) = {
   if (time != "") {align(center)[
-    #if(template == "report") {
+    #if(template in ("report", "book")) {
       v(10em)
       set text(1.3em)
       time
@@ -136,6 +139,21 @@
         *关键字：* 
         #text(font: kai, keywords.join("；"))
       ]
+      v(10pt)
+    }
+  }
+  let mkpreface(preface) = {
+    if (preface != none) {
+    [
+      #v(2em)
+      #set align(center)
+      #set text(2.5em)
+      *前言*
+      #v(1em)
+    ]
+      set par(first-line-indent: 2em,leading: 1.1em)
+      v(2pt)
+      preface
       v(10pt)
     }
   }
@@ -211,6 +229,8 @@
       locate(loc => if(loc.page() != 1) [#title #h(1fr) #info])
     }
   ]
+  
+
   // 正文
   if(template in ("article")){
     set page(numbering: "1", number-align: center, header: pageheading,)
@@ -221,16 +241,56 @@
     mkabstruct(abstract, keywords)
     mkcontent(contents)
     body
-  }else if(template in ("book", "report")){
+  }else if(template in ("report")){
     mktitle(title)
     mkinfo(info)
     mkauthor(authors)
     mktime(time)
+    if (contents){
     set page(numbering: "I", number-align: center,header: pageheading,)
     counter(page).update(1)
     mkabstruct(abstract, keywords)
     mkcontent(contents)
-    set page(numbering: "1", number-align: center)
+    }
+    set page(numbering: "1", number-align: center,header: pageheading,)
+    counter(page).update(1)
+    if (contents != true){
+      mkabstruct(abstract, keywords)
+    }
+    body
+  }else if(template in ("book")){
+    mktitle(title)
+    mkinfo(info)
+    mkauthor(authors)
+    mktime(time)
+    show heading: it => box(width: 100%)[
+      #set text(font: heading-font)
+      #v(0.5em)
+      #if it.numbering != none { counter(heading).display() }
+      #h(0.2em)
+      #set text(1.2em)
+      #it.body
+      #v(0.5em)
+    ]
+    show heading.where(level: 1): it => box(width: 100%)[
+      #v(2em)
+      #set align(center)
+      #set heading(numbering: "一")
+      #set text(1.5em)
+      #it
+      #v(1em)
+    ]
+    if (preface!=none){
+      set page(numbering: "A", number-align: center, header: pageheading,)
+      counter(page).update(1)
+      mkpreface(preface)
+    }
+    if (contents){
+      set page(numbering: "I", number-align: center, header: pageheading,)
+      counter(page).update(1)
+      mkcontent(contents)
+    }
+    set page(numbering: "1", number-align: center, header: pageheading,)
     counter(page).update(1)
     body
   }

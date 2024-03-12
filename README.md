@@ -40,16 +40,89 @@ description = "AnZrew's typst template"
   time: "",
   abstract: none,
   keywords: (),
+  preface: none,
   contents: false,
   content_depth: 2,
   font_size: 11pt,
+  body
 )
 ```
-这是函数的参数和默认值。`template`是模板的名称，`title`是标题，`info`是副标题，`authors`是作者，`time`是时间，`abstract`是摘要，`keywords`是关键词，`contents`是是否生成目录，`content_depth`是目录的深度，`font_size`是正文字体大小。
+这是函数的参数和默认值。这些参数的含义：
+```typst
+template: str      \\选择模板，目前支持article、report、book
+title: str         \\标题
+info: str          \\信息，例如副标题、课程名、教师名等（可选）
+authors: arr(str)  \\作者（）
+time: str          \\时间
+abstract: str      \\摘要（可选）
+keywords: arr(str) \\关键词（可选）
+preface: str       \\前言（可选）
+contents: bool     \\是否生成目录（缺省值，可以不写）
+content_depth: int \\目录深度（缺省值，可以不写）
+font_size: lengt   \\字体大小（缺省值，可以不写）
+```
 
 目前支持：
 - article：一般文档
 - report：实验报告
+- book：笔记、书籍
+
+具体使用方法如下。
+## article
+
+有效的参数有：
+```typst
+template: "article",//（缺省值，可以不写）
+title: "",
+info:"",            //（可选）
+authors: (),
+time: "",
+abstract: none,     //（可选）
+keywords: (),       //（可选）
+contents: false,    //（缺省值，可以不写）
+content_depth: 2,   //（缺省值，可以不写）
+font_size: 11pt,    //（缺省值，可以不写）
+```
+标题、（信息、）作者、时间、（摘要、关键词、目录）会依次写在标题页上。
+
+具体效果详见[demo](demo/article.pdf)。
+
+## report
+
+有效的参数有：
+```typst
+template: "report",//（缺省值，可以不写）
+title: "",
+info:"",            //（可选）
+authors: (),
+time: "",
+abstract: none,     //（可选）
+keywords: (),       //（可选）
+contents: false,    //（缺省值，可以不写）
+content_depth: 2,   //（缺省值，可以不写）
+font_size: 11pt,    //（缺省值，可以不写）
+```
+标题、（信息、）作者、时间，作为封面；（摘要、关键词、目录）会生成在目录页上。
+
+具体效果详见[demo](demo/report.pdf)。
+
+## book
+
+有效的参数有：
+```typst
+template: "book",//（缺省值，可以不写）
+title: "",
+info:"",            //（可选）
+authors: (),
+time: "",
+preface: none,      //（可选）
+contents: false,    //（缺省值，可以不写）
+content_depth: 2,   //（缺省值，可以不写）
+font_size: 11pt,    //（缺省值，可以不写）
+```
+标题、（信息、）作者、时间，作为封面；（前言）会生成在前言页上；（目录）会生成在目录页上。
+
+具体效果详见[demo](demo/book.pdf)。
 
 # 其他模块
 
@@ -63,6 +136,6 @@ description = "AnZrew's typst template"
 
 - [x] 解决公式编号问题：默认有编号，可以通过`#set math.equation(numbering: none)`来取消公式的编号
 - [x] 添加模板：Report
-- [ ] 添加模板：Notes
+- [x] 添加模板：Notes
 - [ ] 添加更多的模块，例如：定理证明等等
 - [ ] report的页眉无法正常显示章节名（暂时没有找到解决方案）
