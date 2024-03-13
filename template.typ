@@ -206,10 +206,6 @@
     #align(center)[#it]
   ]
   // 数学公式
-  show heading.where(level:1): it => {
-  counter(math.equation).update(0)
-  it
-  }
   set math.equation(numbering: it => {
     locate(loc => {
       let count = counter(heading.where(level:1)).at(loc).last()
@@ -252,10 +248,22 @@
     mkabstruct(abstract, keywords)
     mkcontent(contents)
     }
+    let pageheading = [
+      #set text(font: header-font)
+      #let header = locate(loc => [#locate(loc => [#counter(heading.where(level:1)).display() #query(selector(heading.where(level:1)).before(loc), loc).last().body.text])])
+      #if(header != "" and header != none) {
+        locate(loc => if(loc.page() != 1) [#title #h(1fr) #info #h(1fr) #header])}else{
+        locate(loc => if(loc.page() != 1) [#title #h(1fr) #info])
+      }
+    ]
     set page(numbering: "1", number-align: center,header: pageheading,)
     counter(page).update(1)
     if (contents != true){
       mkabstruct(abstract, keywords)
+    }
+    show heading.where(level:1): it => {
+      counter(math.equation).update(0)
+      it
     }
     body
   }else if(template in ("book")){
@@ -290,8 +298,21 @@
       counter(page).update(1)
       mkcontent(contents)
     }
+    let pageheading = [
+      #set text(font: header-font)
+      #let header = locate(loc => [#locate(loc => [#counter(heading.where(level:1)).display() #query(selector(heading.where(level:1)).before(loc), loc).last().body.text])])
+      #if(header != "" and header != none) {
+        locate(loc => if(loc.page() != 1) [#title #h(1fr) #info #h(1fr) #header])}else{
+        locate(loc => if(loc.page() != 1) [#title #h(1fr) #info])
+      }
+    ]
     set page(numbering: "1", number-align: center, header: pageheading,)
     counter(page).update(1)
+    show heading.where(level:1): it => {
+      counter(math.equation).update(0)
+      it
+    }
+
     body
   }
 }

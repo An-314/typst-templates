@@ -91,7 +91,7 @@ font_size: 11pt,    //（缺省值，可以不写）
 
 有效的参数有：
 ```typst
-template: "report",//（缺省值，可以不写）
+template: "report", //（需要声明）
 title: "",
 info:"",            //（可选）
 authors: (),
@@ -110,7 +110,7 @@ font_size: 11pt,    //（缺省值，可以不写）
 
 有效的参数有：
 ```typst
-template: "book",//（缺省值，可以不写）
+template: "book",   //（需要声明）
 title: "",
 info:"",            //（可选）
 authors: (),
@@ -137,5 +137,5 @@ font_size: 11pt,    //（缺省值，可以不写）
 - [x] 解决公式编号问题：默认有编号，可以通过`#set math.equation(numbering: none)`来取消公式的编号
 - [x] 添加模板：Report
 - [x] 添加模板：Notes
+- [x] report的页眉无法正常显示章节名：由于作用域的原因，解决方法不是很优雅，哭
 - [ ] 添加更多的模块，例如：定理证明等等
-- [ ] report的页眉无法正常显示章节名（暂时没有找到解决方案）
