@@ -132,6 +132,27 @@ font_size: 11pt,    //（缺省值，可以不写）
 
     针对于数学公式块、代码块后的段落缩进问题，可以使用`newpara()`函数。如果需要另起一段，可以使用`#newpara()`调用即可。
 
+- 表格
+
+    得益于`tablem`与`tablex`两个package，可以使用简单的markdown语法来编写表格。例如：
+    ```typst
+    #tablem[
+      | *Name* | *Location* | *Height* | *Score* |
+      | ------ | ---------- | -------- | ------- |
+      | John   | Second St. | 180 cm   |  5      |
+      | Wally  | Third Av.  | 160 cm   |  10     |
+    ]
+
+    #three-line-table[
+      | *Name* | *Location* | *Height* | *Score* |
+      | ------ | ---------- | -------- | ------- |
+      | John   | Second St. | 180 cm   |  5      |
+      | Wally  | Third Av.  | 160 cm   |  10     |
+    ]
+    ```
+    其中`tablem`是普通的表格，`three-line-table`是三线表。参见[官方文档](https://typst.app/universe/package/tablem)。
+
+
 # TODO
 
 - [x] 解决公式编号问题：默认有编号，可以通过`#set math.equation(numbering: none)`来取消公式的编号
