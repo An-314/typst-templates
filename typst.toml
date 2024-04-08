@@ -1,0 +1,6 @@
+[package]
+name = "mytemplate"
+version = "1.0.0"
+entrypoint = "template.typ"
+authors = ["AnZreww"]
+description = "AnZrew's typst template"
