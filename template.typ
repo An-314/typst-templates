@@ -36,9 +36,9 @@
   body
 ) = {
   /****** 设置字体 ******/
-  let song = ("Linux Libertine", "SimSun")
-  let hei = ("Linux Libertine", "SIMHEI")
-  let kai = ("Linux Libertine", "KaiTi",)
+  let song = ("CMU Serif", "Linux Libertine", "SimSun")
+  let hei = ("CMU Serif", "Linux Libertine", "SIMHEI")
+  let kai = ("CMU Serif","Linux Libertine", "KaiTi",)
   let xbsong = "FZXiaoBiaoSong-B05"
   let code = "Consolas"
   let title-font = hei
@@ -232,9 +232,13 @@
   let pageheading = [
     #set text(font: header-font)
     #let header = if(template in ("article")) {
-      locate(loc => [#locate(loc => [#counter(heading.where(level:1)).display() #query(selector(heading.where(level:1)).before(loc), loc).last().body.text])])
+      if(selector(heading.where(level:1)) == true) {
+        locate(loc => [#locate(loc => [#counter(heading.where(level:1)).display() #query(selector(heading.where(level:1)).before(loc), loc).last().body.text])])
+      }else{
+        ""
+      }
     }else{
-      ""
+      none
     }
     #if(header != "" and header != none) {
       locate(loc => if(loc.page() != 1) [#title #h(1fr) #info #h(1fr) #header])}else{
@@ -335,7 +339,7 @@
 }
 
 
-
+/************************* 定义常用块 *************************/
 #let problem-counter = counter("problem")
 #problem-counter.step()
 
@@ -356,4 +360,31 @@
     inset: 8pt,
     width: 100%
   )[*解答.* #h(0.75em) #body]
+}
+
+#let theorem-counter = counter("theorem")
+#show heading.where(level:1): it => {
+      counter("theorem").update(0)
+      it
+    }
+
+#let theorem(body, name:none) = {
+  theorem-counter.step()
+  
+  block(
+    fill: rgb(241, 241, 255),
+    inset: 8pt,
+    radius: 2pt,
+    width: 100%,
+  )[*Theorem [#counter(heading.where(level:1)).display().#theorem-counter.display()]* #if(name!=none){text(style: "italic",weight: "bold", name)} #h(0.75em) #body]
+}
+
+#let proof(body) = {
+  set enum(numbering: "(1)")
+  block(
+    inset: 8pt,
+    width: 100%
+  )[_Proof._ #h(0.75em) #body 
+  #align(right)[$qed$]
+  ]
 }
